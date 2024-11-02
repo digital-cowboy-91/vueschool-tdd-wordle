@@ -1,6 +1,6 @@
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import WordleBoard from "../WordleBoard.vue";
-import { VICTORY_MESSAGE } from "@/settings";
+import { DEFEAT_MESSAGE, VICTORY_MESSAGE } from "@/settings";
 
 describe("WordleBoard", () => {
   test("a victory message appears when the user makes a guess that matches the word of the day", async (): Promise<void> => {
@@ -27,7 +27,7 @@ describe("WordleBoard", () => {
     await guessInput.setValue("HELLO");
     await guessInput.trigger("keydown.enter");
 
-    expect(wrapper.text()).toContain("You loose!");
+    expect(wrapper.text()).toContain(DEFEAT_MESSAGE);
   });
 
   test.todo("no end-of-game message appears if the user has not made a guess");
