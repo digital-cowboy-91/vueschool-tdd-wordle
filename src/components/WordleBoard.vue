@@ -6,10 +6,7 @@ import enWords from "@/words.en.json";
 defineProps({
   wordOfTheDay: {
     type: String,
-    validator: (wordGiven: string) =>
-      wordGiven.length === 5 &&
-      wordGiven === wordGiven.toUpperCase() &&
-      enWords.includes(wordGiven),
+    validator: (wordGiven: string) => enWords.includes(wordGiven),
   },
 });
 
