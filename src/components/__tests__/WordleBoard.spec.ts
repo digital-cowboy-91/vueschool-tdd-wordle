@@ -38,9 +38,13 @@ describe("WordleBoard", () => {
   });
 
   describe("Word of the day rules", () => {
-    test.each(["SPY", "hello", "ABCDE"])(
-      "if [%s] is provided, emit warning",
-      async (wordOfTheDay: string): Promise<void> => {
+    test.each([
+      { wordOfTheDay: "SPY", reason: "must have 5 characters" },
+      { wordOfTheDay: "hello", reason: "must be all in uppercase" },
+      { wordOfTheDay: "ABCDE", reason: "must be a valid English word" },
+    ])(
+      "emit warning for $wordOfTheDay, word of the day $reason,",
+      async ({ wordOfTheDay }): Promise<void> => {
         console.warn = vi.fn();
 
         mount(WordleBoard, { props: { wordOfTheDay } });
@@ -49,7 +53,7 @@ describe("WordleBoard", () => {
       }
     );
 
-    test("if the word of the day is a valid english word, don't emit warning", () => {
+    test("don't emit warning if the word of the day is a valid", () => {
       console.warn = vi.fn();
 
       mount(WordleBoard, { props: { wordOfTheDay: "HELLO" } });
