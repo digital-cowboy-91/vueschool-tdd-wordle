@@ -12,18 +12,20 @@ describe("WordleBoard", () => {
     });
   });
 
-  test("a victory message appears when the user makes a guess that matches the word of the day", async (): Promise<void> => {
+  async function playersSubmitGuess(guess: string): Promise<void> {
     const guessInput: DOMWrapper<Element> = wrapper.find("input[type=text]");
-    await guessInput.setValue(wordOfTheDay);
+    await guessInput.setValue(guess);
     await guessInput.trigger("keydown.enter");
+  }
+
+  test("a victory message appears when the user makes a guess that matches the word of the day", async (): Promise<void> => {
+    await playersSubmitGuess(wordOfTheDay);
 
     expect(wrapper.text()).toContain(VICTORY_MESSAGE);
   });
 
   test("a defeat message appears if the users makes an incorrect guess", async (): Promise<void> => {
-    const guessInput: DOMWrapper<Element> = wrapper.find("input[type=text]");
-    await guessInput.setValue("HELLO");
-    await guessInput.trigger("keydown.enter");
+    await playersSubmitGuess("HELLO");
 
     expect(wrapper.text()).toContain(DEFEAT_MESSAGE);
   });
