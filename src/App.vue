@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import WordleBoard from './components/WordleBoard.vue'
+import WordleBoard from "./components/WordleBoard.vue";
 </script>
 
 <template>
-  <WordleBoard wordOfTheDay="You did it!" />
+  <WordleBoard wordOfTheDay="TESTS" />
 </template>
