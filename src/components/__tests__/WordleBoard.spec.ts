@@ -35,7 +35,7 @@ describe("WordleBoard", () => {
     expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE);
   });
 
-  test("if a word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
+  test("if the word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
     console.warn = vi.fn();
 
     mount(WordleBoard, { props: { wordOfTheDay: "SPY" } });
@@ -47,6 +47,14 @@ describe("WordleBoard", () => {
     console.warn = vi.fn();
 
     mount(WordleBoard, { props: { wordOfTheDay: "hello" } });
+
+    expect(console.warn).toHaveBeenCalled();
+  });
+
+  test("if the word of the day is not a valid english word, emits warning", () => {
+    console.warn = vi.fn();
+
+    mount(WordleBoard, { props: { wordOfTheDay: "ABCDE" } });
 
     expect(console.warn).toHaveBeenCalled();
   });
