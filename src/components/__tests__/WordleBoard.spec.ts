@@ -18,52 +18,58 @@ describe("WordleBoard", () => {
     await guessInput.trigger("keydown.enter");
   }
 
-  test("a victory message appears when the user makes a guess that matches the word of the day", async (): Promise<void> => {
-    await playersSubmitGuess(wordOfTheDay);
+  describe("End of game messages", () => {
+    test("a victory message appears when the user makes a guess that matches the word of the day", async (): Promise<void> => {
+      await playersSubmitGuess(wordOfTheDay);
 
-    expect(wrapper.text()).toContain(VICTORY_MESSAGE);
+      expect(wrapper.text()).toContain(VICTORY_MESSAGE);
+    });
+
+    test("a defeat message appears if the users makes an incorrect guess", async (): Promise<void> => {
+      await playersSubmitGuess("HELLO");
+
+      expect(wrapper.text()).toContain(DEFEAT_MESSAGE);
+    });
+
+    test("no end-of-game message appears if the user has not made a guess", async (): Promise<void> => {
+      expect(wrapper.text()).not.toContain(VICTORY_MESSAGE);
+      expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE);
+    });
   });
 
-  test("a defeat message appears if the users makes an incorrect guess", async (): Promise<void> => {
-    await playersSubmitGuess("HELLO");
+  describe("Word of the day rules", () => {
+    test("if the word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
+      console.warn = vi.fn();
 
-    expect(wrapper.text()).toContain(DEFEAT_MESSAGE);
+      mount(WordleBoard, { props: { wordOfTheDay: "SPY" } });
+
+      expect(console.warn).toHaveBeenCalled();
+    });
+
+    test("if the word of the day is not uppercase, emits warning", () => {
+      console.warn = vi.fn();
+
+      mount(WordleBoard, { props: { wordOfTheDay: "hello" } });
+
+      expect(console.warn).toHaveBeenCalled();
+    });
+
+    test("if the word of the day is not a valid english word, emits warning", () => {
+      console.warn = vi.fn();
+
+      mount(WordleBoard, { props: { wordOfTheDay: "ABCDE" } });
+
+      expect(console.warn).toHaveBeenCalled();
+    });
+
+    test("if the word of the day is a valid english word, do not emit warn", () => {
+      console.warn = vi.fn();
+
+      mount(WordleBoard, { props: { wordOfTheDay: "HELLO" } });
+
+      expect(console.warn).not.toHaveBeenCalled();
+    });
   });
 
-  test("no end-of-game message appears if the user has not made a guess", async (): Promise<void> => {
-    expect(wrapper.text()).not.toContain(VICTORY_MESSAGE);
-    expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE);
-  });
-
-  test("if the word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
-    console.warn = vi.fn();
-
-    mount(WordleBoard, { props: { wordOfTheDay: "SPY" } });
-
-    expect(console.warn).toHaveBeenCalled();
-  });
-
-  test("if the word of the day is not uppercase, emits warning", () => {
-    console.warn = vi.fn();
-
-    mount(WordleBoard, { props: { wordOfTheDay: "hello" } });
-
-    expect(console.warn).toHaveBeenCalled();
-  });
-
-  test("if the word of the day is not a valid english word, emits warning", () => {
-    console.warn = vi.fn();
-
-    mount(WordleBoard, { props: { wordOfTheDay: "ABCDE" } });
-
-    expect(console.warn).toHaveBeenCalled();
-  });
-
-  test("if the word of the day is a valid english word, do not emit warn", () => {
-    console.warn = vi.fn();
-
-    mount(WordleBoard, { props: { wordOfTheDay: "HELLO" } });
-
-    expect(console.warn).not.toHaveBeenCalled();
-  });
+  describe.todo("Player input", () => {});
 });
