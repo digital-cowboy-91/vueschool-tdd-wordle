@@ -10,14 +10,15 @@ defineProps({
   },
 });
 
-const guessInProgress = ref("");
+const guessInProgress = ref<string | null>(null);
 const guessSubmitted = ref("");
 
-const formattedGuessInProgress = computed({
+const formattedGuessInProgress = computed<string>({
   get() {
-    return guessInProgress.value;
+    return guessInProgress.value ?? "";
   },
   set(rawValue: string) {
+    guessInProgress.value = null;
     guessInProgress.value = rawValue
       .slice(0, WORD_SIZE)
       .toUpperCase()
@@ -25,10 +26,21 @@ const formattedGuessInProgress = computed({
   },
 });
 
-function onSubmit() {
-  if (!enWords.includes(guessInProgress.value)) return;
+function handleInput(e: Event): void {
+  const target = e.target as HTMLInputElement;
+  const cleanVal = target.value
+    .slice(0, WORD_SIZE)
+    .toUpperCase()
+    .replace(/[^a-z]+/gi, "");
 
-  guessSubmitted.value = guessInProgress.value;
+  guessInProgress.value = cleanVal;
+  target.value = cleanVal;
+}
+
+function onSubmit(): void {
+  if (!enWords.includes(formattedGuessInProgress.value)) return;
+
+  guessSubmitted.value = formattedGuessInProgress.value;
 }
 </script>
 
@@ -36,7 +48,8 @@ function onSubmit() {
   <input
     :maxlength="WORD_SIZE"
     type="text"
-    v-model="formattedGuessInProgress"
+    :value="guessInProgress"
+    @input="handleInput"
     @keydown.enter="onSubmit"
   />
   <p

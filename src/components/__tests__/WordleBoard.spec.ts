@@ -86,7 +86,15 @@ describe("WordleBoard", () => {
 
       expect(
         wrapper.find<HTMLInputElement>("input[type=text]").element.value
-      ).toBe("HRT");
+      ).toEqual("HRT");
+    });
+
+    test("none-letter characters do not render on the screen while being typed", async () => {
+      await playersSubmitGuess("333");
+
+      expect(
+        wrapper.find<HTMLInputElement>("input[type=text]").element.value
+      ).toEqual("");
     });
   });
 });
