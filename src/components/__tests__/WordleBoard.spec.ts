@@ -38,31 +38,18 @@ describe("WordleBoard", () => {
   });
 
   describe("Word of the day rules", () => {
-    test("if the word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
-      console.warn = vi.fn();
+    test.each(["SPY", "hello", "ABCDE"])(
+      "if [%s] is provided, emit warning",
+      async (wordOfTheDay: string): Promise<void> => {
+        console.warn = vi.fn();
 
-      mount(WordleBoard, { props: { wordOfTheDay: "SPY" } });
+        mount(WordleBoard, { props: { wordOfTheDay } });
 
-      expect(console.warn).toHaveBeenCalled();
-    });
+        expect(console.warn).toHaveBeenCalled();
+      }
+    );
 
-    test("if the word of the day is not uppercase, emits warning", () => {
-      console.warn = vi.fn();
-
-      mount(WordleBoard, { props: { wordOfTheDay: "hello" } });
-
-      expect(console.warn).toHaveBeenCalled();
-    });
-
-    test("if the word of the day is not a valid english word, emits warning", () => {
-      console.warn = vi.fn();
-
-      mount(WordleBoard, { props: { wordOfTheDay: "ABCDE" } });
-
-      expect(console.warn).toHaveBeenCalled();
-    });
-
-    test("if the word of the day is a valid english word, do not emit warn", () => {
+    test("if the word of the day is a valid english word, don't emit warning", () => {
       console.warn = vi.fn();
 
       mount(WordleBoard, { props: { wordOfTheDay: "HELLO" } });
