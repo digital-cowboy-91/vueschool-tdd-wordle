@@ -36,7 +36,7 @@ describe("WordleBoard", () => {
   });
 
   test("if a word of the day provided does not have exactly 5 chars, emits warning", async (): Promise<void> => {
-    vi.spyOn(console, "warn");
+    console.warn = vi.fn();
 
     mount(WordleBoard, { props: { wordOfTheDay: "SPY" } });
 
