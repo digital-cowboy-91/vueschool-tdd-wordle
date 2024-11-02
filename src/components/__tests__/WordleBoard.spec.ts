@@ -58,4 +58,12 @@ describe("WordleBoard", () => {
 
     expect(console.warn).toHaveBeenCalled();
   });
+
+  test("if the word of the day is a valid english word, do not emit warn", () => {
+    console.warn = vi.fn();
+
+    mount(WordleBoard, { props: { wordOfTheDay: "HELLO" } });
+
+    expect(console.warn).not.toHaveBeenCalled();
+  });
 });
