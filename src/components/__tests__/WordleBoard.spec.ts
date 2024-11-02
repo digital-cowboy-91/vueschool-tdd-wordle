@@ -61,5 +61,11 @@ describe("WordleBoard", () => {
     });
   });
 
-  describe.todo("Player input", () => {});
+  describe.todo("Player input", () => {
+    test("player guesses are limited to 5 characters", async () => {
+      await playersSubmitGuess("TOOLONG");
+
+      expect(wrapper.text()).toContain(VICTORY_MESSAGE);
+    });
+  });
 });
