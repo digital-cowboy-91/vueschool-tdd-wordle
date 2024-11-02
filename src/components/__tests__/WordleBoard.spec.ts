@@ -61,11 +61,18 @@ describe("WordleBoard", () => {
     });
   });
 
-  describe.todo("Player input", () => {
+  describe("Player input", () => {
     test(`player guesses are limited to ${WORD_SIZE} characters`, async () => {
-      await playersSubmitGuess("TOOLONG");
+      await playersSubmitGuess("TESTSEXTRA");
 
       expect(wrapper.text()).toContain(VICTORY_MESSAGE);
+    });
+
+    test(`player guesses cannot be submitted if they are not real words`, async () => {
+      await playersSubmitGuess("ABCDE");
+
+      expect(wrapper.text()).not.toContain(VICTORY_MESSAGE);
+      expect(wrapper.text()).not.toContain(DEFEAT_MESSAGE);
     });
   });
 });
